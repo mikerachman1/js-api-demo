@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Document</title>
   <style>
+    label {
+      padding: 1rem;
+    }
     button {
       background-color: #ff90e8;
       color: #000;
@@ -22,23 +25,36 @@
 </head>
 <body>
   <img src="#"><br>
+  <label>Search new gif!
+    <input type="text" value="cats">
+  </label><br>
   <button>Gimme a New Gif!</button>
+  <div></div>
+  
   <script>
     const img = document.querySelector('img');
     const button = document.querySelector('button');
+    const searchBox = document.querySelector('input');
+    const infoDiv = document.querySelector('div');
 
     function getGif() {
-      fetch('https://api.giphy.com/v1/gifs/translate?api_key=0Lde2PjosjHfu9cLZsQPL3GuWVJn7h59&s=cats', {mode: 'cors'})
+      const searchTerm = searchBox.value;
+      infoDiv.innerHTML = '';
+      fetch(`https://api.giphy.com/v1/gifs/translate?api_key=0Lde2PjosjHfu9cLZsQPL3GuWVJn7h59&s=${searchTerm}`, {mode: 'cors'})
         .then((response) => {
           return response.json();
         })
         .then((response) => {
           img.src = response.data.images.original.url;
+        })
+        .catch((error) => {
+          infoDiv.innerHTML = `Error: ${error}`;
         });
     }
+    
     getGif();
 
-    button.addEventListener('click', () => {getGif()})
+    button.addEventListener('click', () => {getGif()});
   </script>
 </body>
 </html>
